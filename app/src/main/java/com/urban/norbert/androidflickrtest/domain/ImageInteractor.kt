@@ -8,4 +8,15 @@ class ImageInteractor @Inject constructor(
     private val networkDataSource: ImageNetworkDataSource,
     private val diskDataSource: ImageDiskDataSource
 ) {
+
+    // region networkDataSource
+
+    suspend fun getImageByName(imageName: String, pageNum: Int) =
+        networkDataSource.getImageByName(imageName = imageName, pageNum = pageNum)
+
+    // endregion
+
+    // region diskDataSource
+
+    // endregion
 }

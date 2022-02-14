@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AndroidFlickrTest</string>
+    <string name="app_name">Android Flickr Test</string>
+    <string name="image_name">Image name</string>
 </resources>
