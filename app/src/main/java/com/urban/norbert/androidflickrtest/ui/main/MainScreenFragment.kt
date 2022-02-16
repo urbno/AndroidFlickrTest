@@ -5,13 +5,22 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.navigation.extensions.applyArgs
+import co.zsmb.rainbowcake.navigation.navigator
 import com.urban.norbert.androidflickrtest.R
-import com.urban.norbert.androidflickrtest.model.ImagesData
+import com.urban.norbert.androidflickrtest.model.Photo
+import com.urban.norbert.androidflickrtest.ui.details.DetailsScreenFragment
+import com.urban.norbert.androidflickrtest.ui.main.adapters.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import www.sanju.motiontoast.MotionToast
@@ -22,6 +31,9 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private var TAG = MainScreenFragment::class.java.simpleName
 
+    private var imageNameToSearch = "Dog"
+    private lateinit var imagesAdapter: RecyclerViewAdapter
+
     override fun provideViewModel() = getViewModelFromFactory()
 
     override fun getViewResource() = R.layout.fragment_main
@@ -29,13 +41,38 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //viewModel.searchImageByTags("Dog", 1)
+        imagesAdapter = RecyclerViewAdapter(::onPhotoItemClicked)
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = imagesAdapter
+            setHasFixedSize(true)
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
+                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
+            }
+        }
+
+        /*viewModel.photos.observe(viewLifecycleOwner) { data ->
+            imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
+        }*/
 
         image_name_search_field.setOnEditorActionListener { _, keyCode, _ ->
             if (keyCode == EditorInfo.IME_ACTION_DONE) {
-                val imageNameToSearch = image_name_search_field.text.toString().trim()
+                imageNameToSearch = image_name_search_field.text.toString().trim()
                 if (checkInputIsValid(imageNameToSearch)) {
-                    viewModel.searchImageByTags(imageNameToSearch, 1)
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
+                            imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
+                        }
+                    }
                     image_name_search_field.text?.clear()
                     return@setOnEditorActionListener true
                 } else {
@@ -89,5 +126,10 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
         }
     }
+
+    private fun onPhotoItemClicked(photo: Photo) =
+        navigator?.add(DetailsScreenFragment().applyArgs {
+            putString("Key", "Value")
+        })
 
 }

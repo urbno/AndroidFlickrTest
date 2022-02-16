@@ -1,5 +1,7 @@
 package com.urban.norbert.androidflickrtest.network
 
+import androidx.paging.*
+import com.urban.norbert.androidflickrtest.ui.main.paging.ImagesPagingSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -8,6 +10,15 @@ class ImageNetworkDataSource @Inject constructor(
     private val searchApi: SearchApi
 ) {
 
-    suspend fun getImagesByTags(tags: String, pageNum: Int) =
-        searchApi.searchImagesByTags(tags = tags, page = pageNum.toString())
+    fun getImagesByTags(tags: String) =
+        Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 60,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                ImagesPagingSource(searchApi, tags)
+            }
+        ).flow
 }

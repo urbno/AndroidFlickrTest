@@ -24,7 +24,7 @@ data class Photo(
     @SerializedName("title")
     val title: String,
     @SerializedName("url_h")
-    val url_h: String,
+    val url_h: String?,
     @SerializedName("width_h")
     val width_h: Int
 )
