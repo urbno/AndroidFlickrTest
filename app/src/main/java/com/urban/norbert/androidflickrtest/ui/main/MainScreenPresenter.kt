@@ -7,6 +7,6 @@ class MainScreenPresenter @Inject constructor(
     private val imageInteractor: ImageInteractor
 ) {
 
-    suspend fun getImageByName(imageName: String, pageNum: Int) =
-        imageInteractor.getImageByName(imageName = imageName, pageNum = pageNum)
+    suspend fun getImagesByTags(tags: String, pageNum: Int) =
+        imageInteractor.getImagesByTags(tags = tags, pageNum = pageNum)
 }

@@ -8,6 +8,6 @@ class ImageNetworkDataSource @Inject constructor(
     private val searchApi: SearchApi
 ) {
 
-    suspend fun getImageByName(imageName: String, pageNum: Int) =
-        searchApi.searchImageByName(tags = imageName, page = pageNum.toString())
+    suspend fun getImagesByTags(tags: String, pageNum: Int) =
+        searchApi.searchImagesByTags(tags = tags, page = pageNum.toString())
 }

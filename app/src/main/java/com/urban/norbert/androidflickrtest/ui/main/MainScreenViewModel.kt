@@ -1,8 +1,7 @@
 package com.urban.norbert.androidflickrtest.ui.main
 
-import android.util.Log
+import androidx.lifecycle.viewModelScope
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
@@ -13,10 +12,10 @@ class MainScreenViewModel @Inject constructor(
 
     // region network
 
-    fun searchImageByName(imageName: String, pageNum: Int) = execute {
+    fun searchImageByTags(tags: String, pageNum: Int) = execute {
         viewState = Loading
         viewState = try {
-            val result = mainScreenPresenter.getImageByName(imageName = imageName, pageNum = pageNum)
+            val result = mainScreenPresenter.getImagesByTags(tags = tags, pageNum = pageNum)
             DataReady(result)
         } catch (e: Exception) {
             NetworkError

@@ -7,8 +7,14 @@ import retrofit2.http.Query
 
 interface SearchApi {
 
+    /**
+     * @return List of [ImagesData]
+     *
+     * @param tags the tags related to the image.
+     * @param page the current page of items.
+     */
     @GET("/services/rest/")
-    suspend fun searchImageByName(
+    suspend fun searchImagesByTags(
         @Query("method") method: String = NetworkConfig.METHOD,
         @Query("api_key") apiKey: String = BuildConfig.FLICKR_KEY,
         @Query("tags") tags: String,

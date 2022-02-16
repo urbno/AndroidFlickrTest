@@ -11,8 +11,8 @@ class ImageInteractor @Inject constructor(
 
     // region networkDataSource
 
-    suspend fun getImageByName(imageName: String, pageNum: Int) =
-        networkDataSource.getImageByName(imageName = imageName, pageNum = pageNum)
+    suspend fun getImagesByTags(tags: String, pageNum: Int) =
+        networkDataSource.getImagesByTags(tags = tags, pageNum = pageNum)
 
     // endregion
 
