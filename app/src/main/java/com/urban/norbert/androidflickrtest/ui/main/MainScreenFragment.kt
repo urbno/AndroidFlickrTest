@@ -1,5 +1,6 @@
 package com.urban.norbert.androidflickrtest.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -11,10 +12,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
+import co.zsmb.rainbowcake.extensions.exhaustive
 import co.zsmb.rainbowcake.navigation.extensions.applyArgs
 import co.zsmb.rainbowcake.navigation.navigator
+import com.example.awesomedialog.*
 import com.urban.norbert.androidflickrtest.R
 import com.urban.norbert.androidflickrtest.model.Photo
 import com.urban.norbert.androidflickrtest.ui.details.DetailsScreenFragment
@@ -40,54 +44,14 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        imagesAdapter = RecyclerViewAdapter(::onPhotoItemClicked)
-        recycler_view.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = imagesAdapter
-            setHasFixedSize(true)
-            addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
-                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
-            }
-        }
-
-        /*viewModel.photos.observe(viewLifecycleOwner) { data ->
-            imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
-        }*/
-
-        image_name_search_field.setOnEditorActionListener { _, keyCode, _ ->
-            if (keyCode == EditorInfo.IME_ACTION_DONE) {
-                imageNameToSearch = image_name_search_field.text.toString().trim()
-                if (checkInputIsValid(imageNameToSearch)) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
-                            imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
-                        }
-                    }
-                    image_name_search_field.text?.clear()
-                    return@setOnEditorActionListener true
-                } else {
-                    showInputWarningMessage()
-                }
-            }
-            false
-        }
+        initRecyclerView()
+        collectImageData()
+        addSearchListener()
     }
 
     override fun render(viewState: MainScreenViewState) {
         when (viewState) {
-            Initial -> {
-
-            }
+            Initial -> {}
             Loading -> {
                 progress_bar.isVisible = true
                 recycler_view.isVisible = false
@@ -96,14 +60,15 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
                 progress_bar.isVisible = false
                 recycler_view.isVisible = true
                 Timber.d("$TAG network result: ${viewState.result}")
+                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, viewState.result)
             }
             DatabaseError -> {
-
+                showDatabaseAlertDialog()
             }
             NetworkError -> {
-
+                showNetworkAlertDialog()
             }
-        }
+        }.exhaustive
     }
 
     private fun checkInputIsValid(input: String) =
@@ -123,7 +88,40 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private fun collectImageData() {
         viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
+                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
+            }
+        }
+    }
 
+    private fun initRecyclerView() {
+        imagesAdapter = RecyclerViewAdapter(::onPhotoItemClicked)
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = imagesAdapter
+            setHasFixedSize(true)
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+    }
+
+    private fun addSearchListener() {
+        image_name_search_field.setOnEditorActionListener { _, keyCode, _ ->
+            if (keyCode == EditorInfo.IME_ACTION_DONE) {
+                imageNameToSearch = image_name_search_field.text.toString().trim()
+                if (checkInputIsValid(imageNameToSearch)) {
+                    collectImageData()
+                    image_name_search_field.text?.clear()
+                    return@setOnEditorActionListener true
+                } else {
+                    showInputWarningMessage()
+                }
+            }
+            false
         }
     }
 
@@ -132,4 +130,25 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             putString("Key", "Value")
         })
 
+    private fun showNetworkAlertDialog() {
+        AwesomeDialog.build(requireActivity())
+            .title("Network Error", titleColor = Color.BLACK)
+            .body("Something went wrong during network request", color = Color.BLACK)
+            .icon(R.drawable.ic_error_symbol)
+            .onPositive("Refresh") {
+                Timber.d("$TAG network error on positive")
+                //viewModel.loadImages()
+            }
+    }
+
+    private fun showDatabaseAlertDialog() {
+        AwesomeDialog.build(requireActivity())
+            .title("Database Error", titleColor = Color.BLACK)
+            .body("Something went wrong during database request", color = Color.BLACK)
+            .icon(R.drawable.ic_error_symbol)
+            .onPositive("Refresh") {
+                Timber.d("$TAG network error on positive")
+                //viewModel.loadImages()
+            }
+    }
 }

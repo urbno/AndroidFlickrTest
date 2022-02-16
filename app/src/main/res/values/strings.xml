@@ -3,4 +3,6 @@
     <string name="image_name">Image name</string>
     <string name="warning_title">Warning</string>
     <string name="warning_message">Please use comma separated tags without space!</string>
+    <string name="results_could_not_be_loaded">Results could not be loaded</string>
+    <string name="retry">Retry</string>
 </resources>
