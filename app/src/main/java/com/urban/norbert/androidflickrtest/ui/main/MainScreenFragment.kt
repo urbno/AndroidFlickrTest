@@ -22,6 +22,7 @@ import com.example.awesomedialog.*
 import com.urban.norbert.androidflickrtest.R
 import com.urban.norbert.androidflickrtest.model.Photo
 import com.urban.norbert.androidflickrtest.ui.details.DetailsScreenFragment
+import com.urban.norbert.androidflickrtest.ui.main.adapters.PhotoLoadStateAdapter
 import com.urban.norbert.androidflickrtest.ui.main.adapters.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.flow.collect
@@ -98,7 +99,10 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
         imagesAdapter = RecyclerViewAdapter(::onPhotoItemClicked)
         recycler_view.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = imagesAdapter
+            adapter = imagesAdapter.withLoadStateHeaderAndFooter(
+                header = PhotoLoadStateAdapter { imagesAdapter.retry() },
+                footer = PhotoLoadStateAdapter { imagesAdapter.retry() }
+            )
             setHasFixedSize(true)
             addItemDecoration(
                 DividerItemDecoration(
