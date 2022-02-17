@@ -6,13 +6,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -25,8 +20,6 @@ import com.urban.norbert.androidflickrtest.ui.details.DetailsScreenFragment
 import com.urban.norbert.androidflickrtest.ui.main.adapters.PhotoLoadStateAdapter
 import com.urban.norbert.androidflickrtest.ui.main.adapters.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import www.sanju.motiontoast.MotionToast
 import www.sanju.motiontoast.MotionToastStyle
@@ -38,9 +31,7 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private var imageNameToSearch = "Dog"
     private lateinit var imagesAdapter: RecyclerViewAdapter
-
     override fun provideViewModel() = getViewModelFromFactory()
-
     override fun getViewResource() = R.layout.fragment_main
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,11 +79,12 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
     }
 
     private fun collectImageData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
-                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
-            }
-        }
+        viewModel.searchImagesByTags(imageNameToSearch)
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
+//                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
+//            }
+//        }
     }
 
     private fun initRecyclerView() {
@@ -131,7 +123,7 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private fun onPhotoItemClicked(photo: Photo) =
         navigator?.add(DetailsScreenFragment().applyArgs {
-            putString("Key", "Value")
+            putString(DetailsScreenFragment.IMAGE_ID, photo.id)
         })
 
     private fun showNetworkAlertDialog() {

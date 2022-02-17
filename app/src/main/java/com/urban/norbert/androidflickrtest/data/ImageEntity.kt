@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "images")
 data class ImageEntity(
     @PrimaryKey(autoGenerate = true) var imageDBId: Long?,
-    @ColumnInfo(name = "idImage") var idImage: String?
+    @ColumnInfo(name = "imageId") var imageId: String?
 )
 

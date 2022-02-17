@@ -5,6 +5,7 @@ import co.zsmb.rainbowcake.config.rainbowCake
 import co.zsmb.rainbowcake.dagger.RainbowCakeApplication
 import co.zsmb.rainbowcake.timber.TIMBER
 import com.urban.norbert.androidflickrtest.di.AppComponent
+import com.urban.norbert.androidflickrtest.di.ApplicationModule
 import com.urban.norbert.androidflickrtest.di.DaggerAppComponent
 import timber.log.Timber
 
@@ -13,7 +14,9 @@ class FlickrTestApplication : RainbowCakeApplication() {
     override lateinit var injector: AppComponent
 
     override fun setupInjector() {
-        injector = DaggerAppComponent.create()
+        injector = DaggerAppComponent.builder()
+            .applicationModule(ApplicationModule(this))
+            .build()
     }
 
     override fun onCreate() {
@@ -21,7 +24,6 @@ class FlickrTestApplication : RainbowCakeApplication() {
 
         rainbowCake {
             logger = Loggers.TIMBER
-            consumeExecuteExceptions = false
             isDebug = BuildConfig.DEBUG
         }
 

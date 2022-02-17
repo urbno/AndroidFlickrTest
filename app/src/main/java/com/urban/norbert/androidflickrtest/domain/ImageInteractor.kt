@@ -18,5 +18,8 @@ class ImageInteractor @Inject constructor(
 
     // region diskDataSource
 
+    fun getImageById(imageId: String) =
+        diskDataSource.getImageById(imageId = imageId)
+
     // endregion
 }
