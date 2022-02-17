@@ -20,4 +20,8 @@ class MainScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteAllImages() = executeNonBlocking {
+        mainScreenPresenter.deleteAllImages()
+    }
 }

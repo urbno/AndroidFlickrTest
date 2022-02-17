@@ -7,7 +7,7 @@ class DetailsScreenPresenter @Inject constructor(
     private val imageInteractor: ImageInteractor
 ) {
 
-    fun getImageById(imageId: String) =
+    suspend fun getImageById(imageId: String) =
         imageInteractor.getImageById(imageId = imageId)
 
 }

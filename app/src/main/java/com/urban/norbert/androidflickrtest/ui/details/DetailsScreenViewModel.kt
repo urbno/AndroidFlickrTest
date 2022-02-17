@@ -1,7 +1,7 @@
 package com.urban.norbert.androidflickrtest.ui.details
 
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
-import kotlinx.coroutines.flow.collect
+import java.io.IOException
 import javax.inject.Inject
 
 class DetailsScreenViewModel @Inject constructor(
@@ -9,13 +9,13 @@ class DetailsScreenViewModel @Inject constructor(
 ) :
     RainbowCakeViewModel<DetailsScreenViewState>(Initial) {
 
-    fun getImageDetailsById(imageId: String) {
+    fun getImageDetailsById(imageId: String) = execute {
         viewState = Loading
-        executeNonBlocking {
-            detailsScreenPresenter.getImageById(imageId = imageId).collect {
-                viewState = DetailsReady(it)
-            }
+        viewState = try {
+            val result = detailsScreenPresenter.getImageById(imageId = imageId)
+            DetailsReady(result)
+        } catch (e: IOException) {
+            DatabaseError
         }
     }
-
 }

@@ -18,8 +18,12 @@ class ImageInteractor @Inject constructor(
 
     // region diskDataSource
 
-    fun getImageById(imageId: String) =
+    suspend fun getImageById(imageId: String) =
         diskDataSource.getImageById(imageId = imageId)
+
+    suspend fun deleteAllImages() =
+        diskDataSource.deleteAllImages()
+
 
     // endregion
 }

@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ImageDao {
@@ -14,10 +13,10 @@ interface ImageDao {
     fun getSavedImages(): PagingSource<Int, ImageEntity>
 
     @Query("SELECT * FROM images WHERE imageId = :imageId")
-    fun getSpecificImage(imageId: String): Flow<ImageEntity>
+    suspend fun getSpecificImage(imageId: String): ImageEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertImages(vararg cocktails: ImageEntity)
+    suspend fun insertImages(vararg imageEntity: ImageEntity)
 
     @Query("DELETE FROM images WHERE imageId = :imageId")
     suspend fun deleteImage(imageId: String)

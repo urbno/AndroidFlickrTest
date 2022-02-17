@@ -149,6 +149,13 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     /**
+     * Coil
+     * https://github.com/coil-kt/coil
+     */
+    def coil_version = '1.4.0'
+    implementation "io.coil-kt:coil:$coil_version"
+
+    /**
      * Awesome Dialog
      * https://github.com/chnouman/AwesomeDialog
      */

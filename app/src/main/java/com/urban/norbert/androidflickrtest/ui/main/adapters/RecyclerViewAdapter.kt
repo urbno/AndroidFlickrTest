@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.squareup.picasso.Picasso
 import com.urban.norbert.androidflickrtest.R
 import com.urban.norbert.androidflickrtest.model.Photo
 
@@ -34,7 +33,6 @@ class RecyclerViewAdapter(private val imageClickListener: (photo: Photo) -> Unit
                     image.setOnClickListener {
                         imageClickListener(photo)
                     }
-                    //Picasso.get().load(url).into(image)
                     Glide.with(image)
                         .load(url)
                         .optionalFitCenter()

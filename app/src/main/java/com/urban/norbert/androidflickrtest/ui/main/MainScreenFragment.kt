@@ -80,11 +80,6 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private fun collectImageData() {
         viewModel.searchImagesByTags(imageNameToSearch)
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.searchImagesByTags(imageNameToSearch).collect { data ->
-//                imagesAdapter.submitData(viewLifecycleOwner.lifecycle, data)
-//            }
-//        }
     }
 
     private fun initRecyclerView() {
@@ -110,6 +105,7 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             if (keyCode == EditorInfo.IME_ACTION_DONE) {
                 imageNameToSearch = image_name_search_field.text.toString().trim()
                 if (checkInputIsValid(imageNameToSearch)) {
+                    viewModel.deleteAllImages()
                     collectImageData()
                     image_name_search_field.text?.clear()
                     return@setOnEditorActionListener true

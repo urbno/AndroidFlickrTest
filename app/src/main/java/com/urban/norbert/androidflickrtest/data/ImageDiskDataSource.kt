@@ -7,6 +7,12 @@ import javax.inject.Singleton
 class ImageDiskDataSource @Inject constructor(
     private val imageDao: ImageDao
 ) {
-    fun getImageById(imageId: String) =
+    suspend fun getImageById(imageId: String) =
         imageDao.getSpecificImage(imageId)
+
+    suspend fun insertImage(imageEntity: ImageEntity) =
+        imageDao.insertImages()
+
+    suspend fun deleteAllImages() =
+        imageDao.deleteAllImages()
 }

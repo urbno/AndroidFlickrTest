@@ -9,4 +9,7 @@ class MainScreenPresenter @Inject constructor(
 
     fun getImagesByTags(tags: String) =
         imageInteractor.getImagesByTags(tags = tags)
+
+    suspend fun deleteAllImages() =
+        imageInteractor.deleteAllImages()
 }
