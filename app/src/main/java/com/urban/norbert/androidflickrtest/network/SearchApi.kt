@@ -3,6 +3,7 @@ package com.urban.norbert.androidflickrtest.network
 import com.urban.norbert.androidflickrtest.BuildConfig
 import com.urban.norbert.androidflickrtest.model.ImagesData
 import com.urban.norbert.androidflickrtest.model.Photo
+import com.urban.norbert.androidflickrtest.model.detail.PhotoDetail
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -39,5 +40,5 @@ interface SearchApi {
         @Query("secret") secret: String,
         @Query("format") format: String = NetworkConfig.FORMAT,
         @Query("nojsoncallback") noJsonCallback: String = NetworkConfig.NO_JSON_CALLBACK,
-    ): Photo
+    ): PhotoDetail
 }

@@ -9,6 +9,7 @@ class DetailsScreenViewModel @Inject constructor(
 ) :
     RainbowCakeViewModel<DetailsScreenViewState>(Initial) {
 
+    // from DB
     fun getImageDetailsById(imageId: String) = execute {
         viewState = Loading
         viewState = try {

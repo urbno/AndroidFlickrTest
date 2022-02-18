@@ -1,17 +1,17 @@
 package com.urban.norbert.androidflickrtest.ui.util
 
 import com.urban.norbert.androidflickrtest.data.ImageEntity
-import com.urban.norbert.androidflickrtest.model.Photo
+import com.urban.norbert.androidflickrtest.model.detail.PhotoDetail
 
 object ItemConverter {
 
-    fun modelToEntity(photo: Photo) =
+    fun modelToEntity(photoDetail: PhotoDetail) =
         ImageEntity(
             imageDBId = null,
-            imageId = photo.id,
-            title = photo.title,
-            url = photo.url_h,
+            imageId = photoDetail.photo.id,
+            title = photoDetail.photo.title._content,
+            url = photoDetail.photo.urls.url[0]._content,
             image = null,
-            description = photo.description?._content
+            description = photoDetail.photo.description._content
         )
 }

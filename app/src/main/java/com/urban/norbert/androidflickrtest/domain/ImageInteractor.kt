@@ -21,6 +21,9 @@ class ImageInteractor @Inject constructor(
 
     // region diskDataSource
 
+    suspend fun getSavedImages() =
+        diskDataSource.getSavedImages()
+
     suspend fun getImageById(imageId: String) =
         diskDataSource.getImageById(imageId = imageId)
 

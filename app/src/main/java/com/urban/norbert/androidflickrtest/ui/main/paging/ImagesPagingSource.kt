@@ -33,29 +33,24 @@ class ImagesPagingSource(
             val response = searchApi.searchImagesByTags(tags = query, page = page.toString())
             val images = response.photos.photo
             images.forEach {
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (!it.url_h.isNullOrEmpty()) {
-                        val convertedItem = ItemConverter.modelToEntity(it)
-                        Glide.with(context)
-                            .load(it.url_h.replace("\\/", "/"))
-                            .into(object : CustomTarget<Drawable>() {
-                                override fun onResourceReady(
-                                    resource: Drawable,
-                                    transition: Transition<in Drawable>?
-                                ) {
-                                    convertedItem.image = (resource as BitmapDrawable).bitmap
-                                    CoroutineScope(Dispatchers.IO).launch {
-//                                        searchApi.searchDetailsByPhotoId(
-//                                            photo_id = it.id,
-//                                            secret = it.secret
-//                                        ).description?._content.also { convertedItem.description = it }
-                                        imageDao.insertImages(convertedItem)
-                                    }
+                if (!it.url_h.isNullOrEmpty()) {
+                    val detail = searchApi.searchDetailsByPhotoId(photo_id = it.id, secret = it.secret)
+                    val convertedItem = ItemConverter.modelToEntity(detail)
+                    Glide.with(context)
+                        .load(it.url_h.replace("\\/", "/"))
+                        .into(object : CustomTarget<Drawable>() {
+                            override fun onResourceReady(
+                                resource: Drawable,
+                                transition: Transition<in Drawable>?
+                            ) {
+                                convertedItem.image = (resource as BitmapDrawable).bitmap
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    imageDao.insertImages(convertedItem)
                                 }
+                            }
 
-                                override fun onLoadCleared(placeholder: Drawable?) {}
-                            })
-                    }
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
                 }
             }
             LoadResult.Page(

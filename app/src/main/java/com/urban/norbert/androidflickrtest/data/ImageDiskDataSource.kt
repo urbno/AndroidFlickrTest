@@ -7,6 +7,10 @@ import javax.inject.Singleton
 class ImageDiskDataSource @Inject constructor(
     private val imageDao: ImageDao
 ) {
+
+    suspend fun getSavedImages() =
+        imageDao.getSavedImages()
+
     suspend fun getImageById(imageId: String) =
         imageDao.getSpecificImage(imageId)
 

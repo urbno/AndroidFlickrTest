@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import co.zsmb.rainbowcake.base.RainbowCakeViewModel
 import kotlinx.coroutines.flow.collect
+import java.lang.Exception
 import javax.inject.Inject
 
 class MainScreenViewModel @Inject constructor(
@@ -14,10 +15,14 @@ class MainScreenViewModel @Inject constructor(
 
     fun searchImagesByTags(query: String) {
         viewState = Loading
-        executeNonBlocking {
-            mainScreenPresenter.getImagesByTags(tags = query).cachedIn(viewModelScope).collect {
-                viewState = DataReady(it)
+        try {
+            executeNonBlocking {
+                mainScreenPresenter.getImagesByTags(tags = query).cachedIn(viewModelScope).collect {
+                    viewState = DataReady(it)
+                }
             }
+        } catch (e: Exception) {
+            NetworkError
         }
     }
 
