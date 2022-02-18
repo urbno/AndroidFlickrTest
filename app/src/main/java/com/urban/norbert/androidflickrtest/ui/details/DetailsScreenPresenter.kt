@@ -10,4 +10,7 @@ class DetailsScreenPresenter @Inject constructor(
     suspend fun getImageById(imageId: String) =
         imageInteractor.getImageById(imageId = imageId)
 
+    suspend fun getImageDetailsById(imageId: String, secret: String) =
+        imageInteractor.getImageDetailsById(imageId = imageId, secret = secret)
+
 }

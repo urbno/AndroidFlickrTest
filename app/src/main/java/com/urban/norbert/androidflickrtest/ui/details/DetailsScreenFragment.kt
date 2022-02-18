@@ -56,6 +56,9 @@ class DetailsScreenFragment :
 
     private fun initDetailView(image: ImageEntity) {
         Timber.d("$TAG - image: ${image.image}")
+        image_title.text = image.title
+        image_url.text = image.url
+        image_description.text = image.description
         Glide.with(requireContext())
             .load(image.image)
             .optionalFitCenter()

@@ -6,7 +6,8 @@ object NetworkConfig {
      * https://www.flickr.com/services/api/flickr.photos.search.html
      */
     const val API_ENDPOINT_ADDRESS = "https://api.flickr.com"
-    const val METHOD = "flickr.photos.search"
+    const val METHOD_PHOTOS_SEARCH = "flickr.photos.search"
+    const val METHOD_PHOTO_DETAIL = "flickr.photos.getInfo"
     const val FORMAT = "json"
     const val PER_PAGE = "20"
     const val MEDIA = "photos"

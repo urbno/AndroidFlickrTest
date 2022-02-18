@@ -45,6 +45,10 @@ class ImagesPagingSource(
                                 ) {
                                     convertedItem.image = (resource as BitmapDrawable).bitmap
                                     CoroutineScope(Dispatchers.IO).launch {
+//                                        searchApi.searchDetailsByPhotoId(
+//                                            photo_id = it.id,
+//                                            secret = it.secret
+//                                        ).description?._content.also { convertedItem.description = it }
                                         imageDao.insertImages(convertedItem)
                                     }
                                 }

@@ -11,6 +11,7 @@ data class ImageEntity(
     @ColumnInfo(name = "imageId") var imageId: String?,
     @ColumnInfo(name = "title") var title: String?,
     @ColumnInfo(name = "url") var url: String?,
-    @ColumnInfo(name = "image") var image: Bitmap?
+    @ColumnInfo(name = "image") var image: Bitmap?,
+    @ColumnInfo(name = "description") var description: String?
 )
 

@@ -11,6 +11,7 @@ object ItemConverter {
             imageId = photo.id,
             title = photo.title,
             url = photo.url_h,
-            image = null
+            image = null,
+            description = photo.description?._content
         )
 }

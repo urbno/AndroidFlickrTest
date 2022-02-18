@@ -31,4 +31,7 @@ class ImageNetworkDataSource @Inject constructor(
                 )
             }
         ).flow
+
+    suspend fun getImageDetailsById(imageId: String, secret: String) =
+        searchApi.searchDetailsByPhotoId(photo_id = imageId, secret = secret)
 }
