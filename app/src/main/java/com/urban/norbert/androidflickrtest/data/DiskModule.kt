@@ -16,6 +16,11 @@ class DiskModule {
 
     @Provides
     @Singleton
-    fun provideImageDao(cocktailDatabase: AppDatabase) =
-        cocktailDatabase.imageDao()
+    fun provideImageDao(imagesDatabase: AppDatabase) =
+        imagesDatabase.imageDao()
+
+    @Provides
+    @Singleton
+    fun provideQueryDao(imagesDatabase: AppDatabase) =
+        imagesDatabase.queryDao()
 }

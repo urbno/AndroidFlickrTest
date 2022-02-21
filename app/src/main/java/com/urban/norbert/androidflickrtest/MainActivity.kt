@@ -1,11 +1,17 @@
 package com.urban.norbert.androidflickrtest
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import co.zsmb.rainbowcake.navigation.SimpleNavActivity
+import com.urban.norbert.androidflickrtest.ui.main.MainScreenFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : SimpleNavActivity() {
+
+    private val TAG = MainActivity::class.java.simpleName
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        if (savedInstanceState == null) {
+            navigator.add(MainScreenFragment())
+        }
     }
 }
