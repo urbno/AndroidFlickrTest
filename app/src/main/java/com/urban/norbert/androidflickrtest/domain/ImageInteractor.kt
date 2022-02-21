@@ -1,6 +1,7 @@
 package com.urban.norbert.androidflickrtest.domain
 
 import com.urban.norbert.androidflickrtest.data.ImageDiskDataSource
+import com.urban.norbert.androidflickrtest.data.QueryEntity
 import com.urban.norbert.androidflickrtest.network.ImageNetworkDataSource
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class ImageInteractor @Inject constructor(
 
     // region diskDataSource
 
-    suspend fun getSavedImages() =
+    fun getSavedImages() =
         diskDataSource.getSavedImages()
 
     suspend fun getImageById(imageId: String) =
@@ -30,6 +31,17 @@ class ImageInteractor @Inject constructor(
     suspend fun deleteAllImages() =
         diskDataSource.deleteAllImages()
 
+    fun getQuery() =
+        diskDataSource.getQuery()
+
+    suspend fun isQueryAvailable() =
+        diskDataSource.isQueryAvailable()
+
+    suspend fun insertQuery(query: QueryEntity) =
+        diskDataSource.insertQuery(query)
+
+    suspend fun deleteQuery() =
+        diskDataSource.deleteQuery()
 
     // endregion
 }

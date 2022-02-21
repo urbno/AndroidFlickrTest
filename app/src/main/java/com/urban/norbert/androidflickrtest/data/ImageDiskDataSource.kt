@@ -5,10 +5,11 @@ import javax.inject.Singleton
 
 @Singleton
 class ImageDiskDataSource @Inject constructor(
-    private val imageDao: ImageDao
+    private val imageDao: ImageDao,
+    private val queryDao: QueryDao
 ) {
 
-    suspend fun getSavedImages() =
+    fun getSavedImages() =
         imageDao.getSavedImages()
 
     suspend fun getImageById(imageId: String) =
@@ -19,4 +20,16 @@ class ImageDiskDataSource @Inject constructor(
 
     suspend fun deleteAllImages() =
         imageDao.deleteAllImages()
+
+    fun getQuery() =
+        queryDao.getQuery()
+
+    suspend fun insertQuery(query: QueryEntity) =
+        queryDao.insertQuery(query)
+
+    suspend fun deleteQuery() =
+        queryDao.deleteQuery()
+
+    suspend fun isQueryAvailable() =
+        queryDao.count()
 }

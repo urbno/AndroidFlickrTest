@@ -14,4 +14,5 @@ object NetworkConfig {
     const val EXTRAS = "url_h"
     const val SAFE_SEARCH = "1"
     const val NO_JSON_CALLBACK = "1"
+    const val FIRST_QUERY_TAG = "Dog"
 }

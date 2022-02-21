@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import co.zsmb.rainbowcake.base.OneShotEvent
 import co.zsmb.rainbowcake.base.RainbowCakeFragment
 import co.zsmb.rainbowcake.dagger.getViewModelFromFactory
 import co.zsmb.rainbowcake.extensions.exhaustive
@@ -29,7 +30,7 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
 
     private var TAG = MainScreenFragment::class.java.simpleName
 
-    private var imageNameToSearch = "Dog"
+    private lateinit var imageNameToSearch: String
     private lateinit var imagesAdapter: RecyclerViewAdapter
     override fun provideViewModel() = getViewModelFromFactory()
     override fun getViewResource() = R.layout.fragment_main
@@ -37,7 +38,7 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        collectImageData()
+        viewModel.getLatestQuery()
         addSearchListener()
     }
 
@@ -63,6 +64,15 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
         }.exhaustive
     }
 
+    override fun onEvent(event: OneShotEvent) {
+        super.onEvent(event)
+        when (event) {
+            is MainScreenViewModel.QueryMessage -> {
+                viewModel.searchImagesByTags(event.message)
+            }
+        }
+    }
+
     private fun checkInputIsValid(input: String) =
         input.isNotEmpty() && Pattern.compile("^[a-zA-Z]+(,[a-zA-Z]+)*$").matcher(input).find()
 
@@ -76,10 +86,6 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             duration = MotionToast.LONG_DURATION,
             font = ResourcesCompat.getFont(requireContext(), R.font.helvetica_regular)
         )
-    }
-
-    private fun collectImageData() {
-        viewModel.searchImagesByTags(imageNameToSearch)
     }
 
     private fun initRecyclerView() {
@@ -105,8 +111,9 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             if (keyCode == EditorInfo.IME_ACTION_DONE) {
                 imageNameToSearch = image_name_search_field.text.toString().trim()
                 if (checkInputIsValid(imageNameToSearch)) {
-                    viewModel.deleteAllImages()
-                    collectImageData()
+                    viewModel.deleteDatabases()
+                    viewModel.insertQuery(imageNameToSearch)
+                    viewModel.searchImagesByTags(imageNameToSearch)
                     image_name_search_field.text?.clear()
                     return@setOnEditorActionListener true
                 } else {
@@ -129,7 +136,6 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             .icon(R.drawable.ic_error_symbol)
             .onPositive("Refresh") {
                 Timber.d("$TAG network error on positive")
-                //viewModel.loadImages()
             }
     }
 
@@ -140,7 +146,6 @@ class MainScreenFragment : RainbowCakeFragment<MainScreenViewState, MainScreenVi
             .icon(R.drawable.ic_error_symbol)
             .onPositive("Refresh") {
                 Timber.d("$TAG network error on positive")
-                //viewModel.loadImages()
             }
     }
 }

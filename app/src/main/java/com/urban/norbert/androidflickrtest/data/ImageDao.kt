@@ -1,13 +1,10 @@
 package com.urban.norbert.androidflickrtest.data
 
-import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.urban.norbert.androidflickrtest.model.Photo
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ImageDao {
@@ -26,4 +23,7 @@ interface ImageDao {
 
     @Query("DELETE FROM images")
     suspend fun deleteAllImages()
+
+    @Query("SELECT COUNT(imageId) from images")
+    suspend fun count(): Int
 }
