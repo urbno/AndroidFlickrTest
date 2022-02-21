@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Prepare local.properties
           command: |
-            touch local.properties
+            > local.properties
             echo "FLICKR_KEY=$FLICKR_KEY" >> ~/AndroidFlickrTest/local.properties
       - run:
           name: chmod permissions
