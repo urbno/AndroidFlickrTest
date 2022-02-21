@@ -25,7 +25,10 @@ jobs:
       # Checkout the code as the first step.
       - checkout
       - run:
-          echo "FLICKR_KEY=$FLICKR_KEY" >> ~/AndroidFlickrTest/local.properties
+          name: Prepare local.properties
+          command: |
+            touch /AndroidFlickrTest/local.properties
+            echo "FLICKR_KEY=$FLICKR_KEY" >> ~/AndroidFlickrTest/local.properties
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
