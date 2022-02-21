@@ -18,7 +18,7 @@ interface SearchApi {
     @GET("/services/rest/")
     suspend fun searchImagesByTags(
         @Query("method") method: String = NetworkConfig.METHOD_PHOTOS_SEARCH,
-        @Query("api_key") apiKey: String = BuildConfig.FLICKR_KEY,
+        @Query("api_key") apiKey: String = NetworkConfig.FLICKR_API_KEY,
         @Query("tags") tags: String,
         @Query("format") format: String = NetworkConfig.FORMAT,
         @Query("per_page") perPage: String = NetworkConfig.PER_PAGE,
@@ -35,7 +35,7 @@ interface SearchApi {
     @GET("/services/rest/")
     suspend fun searchDetailsByPhotoId(
         @Query("method") method: String = NetworkConfig.METHOD_PHOTO_DETAIL,
-        @Query("api_key") apiKey: String = BuildConfig.FLICKR_KEY,
+        @Query("api_key") apiKey: String = NetworkConfig.FLICKR_API_KEY,
         @Query("photo_id") photo_id: String,
         @Query("secret") secret: String,
         @Query("format") format: String = NetworkConfig.FORMAT,

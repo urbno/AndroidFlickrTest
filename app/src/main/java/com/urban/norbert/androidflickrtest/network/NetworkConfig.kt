@@ -15,4 +15,5 @@ object NetworkConfig {
     const val SAFE_SEARCH = "1"
     const val NO_JSON_CALLBACK = "1"
     const val FIRST_QUERY_TAG = "Dog"
+    const val FLICKR_API_KEY = "65803e8f6e4a3982200621cad356be51"
 }
